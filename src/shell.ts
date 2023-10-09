@@ -1,22 +1,30 @@
+import "./style.css";
 
-import { partida} from "./modelo";
+import {
+    handleDameCarta,
+    handleMePlanto,
+    seguirPartida,
+    botonDameCarta,
+    botonMePlanto,
+    botonReanudar,
+    botonSeguir,
+    nuevaPartida
+   
+} from "./ui";
 
-import { generarNumeroAleatorio } from "./motor";
-
-import { handleCompruebaClick, iniciaPartidaUi} from "./ui";
-
-// TODO: mover esto a DOM loaded
-partida.numeroParaAcertar = generarNumeroAleatorio();
 
 
-document.addEventListener("DOMContentLoaded", iniciaPartidaUi);
+if (botonDameCarta && botonDameCarta instanceof HTMLButtonElement) {
+    botonDameCarta.addEventListener("click", handleDameCarta);
+}
+if (botonMePlanto && botonMePlanto instanceof HTMLButtonElement) {
+    botonMePlanto.addEventListener("click", handleMePlanto);
+};
 
-const botonComprobar = document.getElementById("comprobar");
-botonComprobar?.addEventListener("click", handleCompruebaClick);
+if (botonReanudar && botonReanudar instanceof HTMLButtonElement) {
+    botonReanudar.addEventListener("click", nuevaPartida);
+};
 
-const botonInicia = document.getElementById("inicia");
-botonInicia?.addEventListener("click", () => {
-    iniciaPartidaUi();
-});
-
-// TODO iniciaPartida terminar acción del botón y crear salida para mostrar número aleatorio si pierdes.
+if (botonSeguir && botonSeguir instanceof HTMLButtonElement) {
+    botonSeguir.addEventListener("click", seguirPartida);
+};

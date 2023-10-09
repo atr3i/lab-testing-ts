@@ -14,6 +14,42 @@
   -webkit-text-size-adjust: 100%;
 }
 
+.carta {
+  border-radius: 15px;
+  margin: 1rem 0;
+}
+
+#seguir {
+  display: none;
+  margin: 1rem auto;
+  background: purple;
+}
+
+#puntuacion {
+  font-size: 2rem;
+}
+
+#puntuacion span {
+  font-weight: 800;
+}
+
+#mensaje:not(:empty) {
+  font-size: 1.5rem;
+  margin: 1rem 0;
+  padding: 2rem;
+  background-color: #333333;
+  border-radius: 15px;
+}
+#mensaje.gameOver,
+#mensaje.winner {
+  font-weight: bold;
+}
+#mensaje.gameOver {
+  background: crimson;
+}
+#mensaje.winner {
+  background: green;
+}
 a {
   font-weight: 500;
   color: #646cff;
@@ -32,7 +68,7 @@ body {
 }
 
 h1 {
-  font-size: 3.2em;
+  font-size: 3em;
   line-height: 1.1;
 }
 

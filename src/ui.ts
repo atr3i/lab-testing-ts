@@ -1,76 +1,135 @@
-import { Estado, partida, MAXIMO_INTENTOS} from "./modelo";
-import { comprobarNumero, iniciaPartidaMotor } from "./motor";
+import { Estado, mano } from "./modelo";
+import {
+    generaCarta,
+    urlCarta, 
+    obtenerPuntuacion,
+    compruebaMensaje,
+    comprobarPuntuacion
+} from "./motor";
 
-export const muestraNumeroDeIntentos = () => {
-    const elementoIntentos = document.getElementById("intentos");
-    if (elementoIntentos) {
-        elementoIntentos.innerHTML = `${partida.numeroDeIntentos} de ${MAXIMO_INTENTOS}`;
+
+export const botonDameCarta = document.getElementById("dame_carta"),
+    botonMePlanto = document.getElementById("me_planto"),
+    botonReanudar = document.getElementById("reanudar"),
+    botonSeguir = document.getElementById("seguir"),
+    cartaPrincipal = document.getElementById("carta"),
+    elementoPuntuacion = document.getElementById("puntuacion"),
+    elementoMensaje = document.getElementById("mensaje");
+
+export const muestraCarta = () => {
+    if (cartaPrincipal) {
+        (cartaPrincipal as HTMLImageElement).src = mano.url;
     } else {
-        console.error(
-            "muestraNumeroDeIntento: No se ha encontrado el elemento con id intentos"
-        );
+        console.error("muestraCarta: no se ha encontrado el elemento con id carta.");
+    }
+}
+
+export const muestraPuntuacion = () => {
+    if (elementoPuntuacion) {
+        elementoPuntuacion.innerHTML = `Puntos: <span>${mano.puntuacion}</span>`
+    } else {
+        console.error("muestraPuntuacion: no se ha encontrado el elemento con id puntuacion.");
     }
 };
 
-export const gestionarGameOver = (estado: Estado) => {
-    if (estado === "GAME_OVER_MAXIMO_INTENTOS") {
-        const elementoComprobar = document.getElementById("comprobar");
-        if (elementoComprobar && elementoComprobar instanceof HTMLButtonElement) {
-            elementoComprobar.disabled = true;
-        } else {
-            console.error(
-                "gestionarGameOver: No se ha encontrado el elemento con id comprobar"
-            );
+export const bloquearPartida = () => {
+    if (botonDameCarta && botonDameCarta instanceof HTMLButtonElement) {
+        botonDameCarta.disabled = true;
+    } else {
+        console.error("bloquearPartida: no se ha encontrado el elemento con id dame_carta.");
+    }
+    if (botonMePlanto && botonMePlanto instanceof HTMLButtonElement) {
+        botonMePlanto.disabled = true;
+    } else {
+        console.error("bloquearPartida: no se ha encontrado el elemento con id me_planto.");
+    }
+    if (botonSeguir && botonSeguir instanceof HTMLButtonElement) {
+        botonSeguir.disabled = true;
+    } else {
+        console.error("bloquearPartida: no se ha encontrado el elemento con id seguir.");
+    }
+};
+
+export const muestraMensaje = (estado: Estado) => {
+    compruebaMensaje(estado);
+    if (elementoMensaje) {
+        elementoMensaje.innerHTML = mano.mensaje;
+    } else {
+        console.error("muestraMensaje: no se ha encontrado el elemento con id mensaje.");
+    }
+};
+
+export const gameOver = (estado: Estado) => {
+    if (estado === "GAME_OVER" || estado === "CLAVADO") {
+        bloquearPartida();
+        muestraMensaje(estado);
+    }
+    if (elementoMensaje) {
+        if (estado === "GAME_OVER") {
+            elementoMensaje.classList.add("gameOver");
+            elementoMensaje.classList.remove("winner");
+        }
+        if (estado === "CLAVADO") {
+            elementoMensaje.classList.remove("gameOver");
+            elementoMensaje.classList.add("winner");
         }
     }
 };
 
 
-export const muestraMensajeComprobacion = (texto: string, estado: Estado) => {
-    let mensaje: string = "";
-    switch (estado) {
-        case "NO_ES_UN_NUMERO":
-            mensaje = `"${texto}" no es un numero 🤨, prueba otra vez`;
-            break;
-        case "EL_NUMERO_ES_MAYOR":
-            mensaje = `UUYYY ! El número ${texto} es MAYOR que el número secreto`;
-            break;
-        case "EL_NUMERO_ES_MENOR":
-            mensaje = `UUYYY ! El número ${texto} es MENOR que el número secreto`;
-            break;
-        case "ES_EL_NUMERO_SECRETO":
-            mensaje = `¡¡¡Enhorabuena, has acertado el número!!! 🎉🎉🎉`;
-            break;
-        case "GAME_OVER_MAXIMO_INTENTOS":
-            mensaje = `🪦 GAME OVER, has superado el número máximo de intentos`;
-            break;
-        default:
-            mensaje = "No se que ha pasado, pero no deberías estar aquí";
-            break;
+export const handleDameCarta = () => {
+    let carta: number = generaCarta();
+    urlCarta(carta);
+    muestraCarta();
+    obtenerPuntuacion(carta);
+    muestraPuntuacion();
+    const estado: Estado = comprobarPuntuacion(mano.puntuacion);
+    gameOver(estado);
+}
+
+export const handleMePlanto = () => {
+    bloquearPartida();
+    const estado: Estado = comprobarPuntuacion(mano.puntuacion);
+    muestraMensaje(estado);
+
+    if (botonSeguir && botonSeguir instanceof HTMLButtonElement) {
+        botonSeguir.style.display = 'block';
+        botonSeguir.disabled = false;
     }
-    const elementoResultado = document.getElementById("resultado");
-    if (elementoResultado) {
-        elementoResultado.innerHTML = mensaje;
-    } else {
-        console.error("muestraMensajeComprobacion: No se ha encontrado el elemento con id resultado");
-    }
+}
+export const seguirPartida = () => {
+    let carta: number = generaCarta();
+    urlCarta(carta);
+    muestraCarta();
+    obtenerPuntuacion(carta);
+    muestraPuntuacion();
+    const estado: Estado = comprobarPuntuacion(mano.puntuacion);
+    gameOver(estado);
 };
 
-export const handleCompruebaClick = () => {
-    let texto: string = "";
-    const inputElement = document.getElementById("numero");
-    if (inputElement && inputElement instanceof HTMLInputElement) {
-        texto = inputElement.value;
+export const nuevaPartida = () => {
+
+    if (botonDameCarta && botonDameCarta instanceof HTMLButtonElement) {
+        mano.puntuacion = 0;
+        botonDameCarta.disabled = false;
     }
-    const estado: Estado = comprobarNumero(texto);
-    muestraMensajeComprobacion(texto, estado);
-    partida.numeroDeIntentos++;
-    muestraNumeroDeIntentos();
-    gestionarGameOver(estado);
-};
+    if (botonMePlanto && botonMePlanto instanceof HTMLButtonElement) {
+        mano.puntuacion = 0;
+        botonMePlanto.disabled = false;
+    }
+    if (botonSeguir && botonSeguir instanceof HTMLButtonElement) {
+        botonSeguir.style.display = 'none';
+    }
+    if (elementoMensaje) {
+        elementoMensaje.innerHTML = "";
+        elementoMensaje.classList.remove("gameOver", "winner");
+    }
+    if (elementoPuntuacion) {
 
-export const iniciaPartidaUi = () => {
-    iniciaPartidaMotor();
-    muestraNumeroDeIntentos();
-};
+        elementoPuntuacion.innerHTML = "";
+    }
+    (cartaPrincipal as HTMLImageElement).src = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/back.jpg";
 
+    muestraPuntuacion();
+
+};
