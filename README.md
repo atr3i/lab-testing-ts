@@ -1,11 +1,29 @@
-# typescript-sandbox
+# Laboratorio Imports
 
-Para la parte de cada módulo en la que te planteamos ejercicios con JavaScript puedes usar este sandbox.
+Refactorización del código desarrollado en el juego de las siete y media.
 
-Pasos:
+### Imports
 
-- Clonate el proyecto.
-- Instala las dependencias con `npm install`.
-- Ejecuta el sandbox con `npm run dev`.
-- Abre el navegador en `http://localhost:5173/` (si ese puerto no te funciona, mira en la consola donde has hecho el build, puede que este ocupado y se haya abierto en otro puerto).
-- Puedes empezar a meter tu código en el fichero:
+- **Modelo** (modelo de datos para el juego)
+- **Motor** (funciones que definen las reglas del juego)
+    - generaNumeroAleatorio
+    - generaCarta
+    - urlCarta
+    - obtenerPuntuacion
+    - comprobarPuntuacion
+    - compruebaMensaje
+- **UI** (funciones que definen la interfaz de usuario)
+    - muestraCarta
+    - muestraPuntuacion
+    - muestraMensaje
+    - cambiaClase
+    - bloquearPartida
+    - reanudarPartida
+- **Shell** (funciones para manejar la partida y eventos para manejarlas)
+    - finDePartida
+    - nuevaCarta
+    - mePlanto
+    - seguirPartida
+    - nuevaPartida
+    - eventos
+

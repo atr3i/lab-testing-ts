@@ -1,22 +1,10 @@
 import { Estado, mano } from "./modelo";
 
-const generaNumeroAleatorio = () => {
-    let numeroAleatorio: number = 0;
-    numeroAleatorio = Math.floor(Math.random() * 10) + 1;
-    return numeroAleatorio;
-}
+export const generaNumeroAleatorio = (): number => Math.floor(Math.random() * 10) + 1;
 
-export const generaCarta = () => {
-    let cartaRandom: number = 0;
-    cartaRandom = generaNumeroAleatorio();
-    if (cartaRandom >= 8) {
-        cartaRandom = cartaRandom + 2;
-    }
-    return cartaRandom;
+export const generaCarta = (cartaRandom: number): number => cartaRandom <= 7 ? cartaRandom : cartaRandom + 2;
 
-}
-
-export const urlCarta = (carta: number): void => {
+export const urlCarta = (carta: number): string => {
     switch (carta) {
         case 1:
             mano.url = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/1_as-copas.jpg";
@@ -52,35 +40,27 @@ export const urlCarta = (carta: number): void => {
             mano.url = "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/back.jpg";
             break;
     }
+  return mano.url;
 };
 
+export const obtenerPuntuacion = (numero: number): number => numero <= 7 ? numero : 0.5;
 
-export const obtenerPuntuacion = (carta: number) => {
-    if (carta >= 10) {
-        carta = 0.5;
-    }
-    mano.puntuacion = carta + mano.puntuacion;
-}
 export const comprobarPuntuacion = (puntuacion: number) => {
-
     if (puntuacion <= 4) {
         return "CONSERVADOR";
     }
     if (puntuacion > 4 && puntuacion <= 6) {
         return "MIEDO";
-
     }
     if (puntuacion > 6 && puntuacion <= 7) {
         return "CASI";
-
     }
     if (puntuacion === 7.5) {
         return "CLAVADO";
     }
-
     return (puntuacion > 7.5) ? "GAME_OVER" : "NUEVA_PARTIDA";
-
 };
+
 export const compruebaMensaje = (estado: Estado) => {
     switch(estado) {
         case "CONSERVADOR":
@@ -102,4 +82,5 @@ export const compruebaMensaje = (estado: Estado) => {
             mano.mensaje = "No sé que ha pasado, pero no deberías estar aquí";
             break;
     }
+    return mano.mensaje;
 };

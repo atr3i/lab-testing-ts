@@ -6,6 +6,7 @@ export type Estado =
     | "GAME_OVER"
     | "NUEVA_PARTIDA";
 
+
 interface Mano {
     url: string;
     mensaje: string;
