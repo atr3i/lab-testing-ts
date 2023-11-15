@@ -61,7 +61,6 @@ export const nuevaPartida = () => {
     reanudarPartida();
 };
 
-
 const eventos = () => {
     const botonDameCarta = document.getElementById("dame_carta");
     const botonMePlanto = document.getElementById("me_planto");
